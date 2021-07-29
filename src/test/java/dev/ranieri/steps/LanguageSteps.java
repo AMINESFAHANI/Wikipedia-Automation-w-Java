@@ -137,4 +137,47 @@ public class LanguageSteps {
             Assert.assertEquals(lang,html.getAttribute("lang"));
         }
     }
+    @When("The Guest clicks the ReadInYourLanguage Button button")
+    public void the_Guest_clicks_on_ReadInYourLanguageButton() {
+        BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(BasicRunner.wikiHomePage.readInYourLanguage));
+        BasicRunner.wikiHomePage.readInYourLanguage.click();
+    }
+
+    @When("The Guest Select A Specific from the list")
+    public void languageList() {
+//        BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated((By.xpath("//*[@id=\"searchLanguage\"]"))));
+//        WebElement readableLamguages = BasicRunner.driver.findElement(By.xpath("//*[@id=\"js-lang-lists\"]/div"));
+//        List<WebElement> lists = readableLamguages.findElements(By.tagName("ul"));
+//        System.out.println(lists.size());
+//        for (WebElement list: lists){
+//            List<WebElement> listItems = list.findElements(By.tagName("li"));
+//            for(WebElement item : listItems ){
+//                System.out.println(item.getText());
+//            }
+//        }
+        List<WebElement> list = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div[1]/ul/li"));
+        System.out.println(list.size());
+
+        List<WebElement> allLists = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div/ul"));
+        System.out.println(allLists.size());
+
+
+        for (int i=1;i<allLists.size()+1;i++){
+            List<WebElement> eachlist = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div["+i+"]/ul/li/a"));
+            System.out.println(eachlist.size());
+            for (WebElement each:eachlist){
+                System.out.println(each.getAttribute("lang"));
+
+            }
+        }
+        //*[@id="js-lang-lists"]/div[3]/ul/li[1]/a
+        //*[@id="js-lang-lists"]/div[2]/ul
+        //*[@id="js-lang-lists"]/div[5]/ul
+    }
+
 }
+
+
+
+
+

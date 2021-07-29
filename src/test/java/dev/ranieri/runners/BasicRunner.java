@@ -38,7 +38,7 @@ public class BasicRunner {
         fluentWait = new FluentWait(driver).withTimeout(5000, TimeUnit.MILLISECONDS).pollingEvery(250, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 
         wikiHomePage = new WikiHomePage(driver);// pass the driver into any poms that you need
-        BasicRunner.driver.manage().window().maximize();
+        driver.manage().window().maximize();
     }
 
     @AfterClass

@@ -30,4 +30,7 @@ public class WikiHomePage {
     @FindBy(xpath = "//*[@id=\"search-form\"]/fieldset/button")
     public WebElement searchInputButton;
 
+    @FindBy(id = "js-lang-list-button")
+    public WebElement readInYourLanguage;
+
 }
