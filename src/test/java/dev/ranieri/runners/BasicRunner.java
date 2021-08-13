@@ -22,8 +22,8 @@ public class BasicRunner {
 
     public static WebDriver driver = null;
     public static WikiHomePage wikiHomePage = null;
-    public static  WebDriverWait wait=null;
-    public static  FluentWait fluentWait=null;
+    public static WebDriverWait wait=null;
+    public static FluentWait fluentWait=null;
 
     @BeforeClass
     public static void setup() {
@@ -44,6 +44,7 @@ public class BasicRunner {
     @AfterClass
     public static void teardown(){
         driver.quit();
+
     }
 
 

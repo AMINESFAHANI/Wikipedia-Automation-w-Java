@@ -20,11 +20,11 @@ import java.util.concurrent.TimeUnit;
 public class LanguageSteps {
 
     @Given("The Guest is on the Wikipedia Home Page")
-    public void the_Guest_is_on_the_Wikipedia_Home_Page()  {
+    public void the_Guest_is_on_the_Wikipedia_Home_Page() {
         BasicRunner.driver.get("https://www.wikipedia.org/");
         BasicRunner.wait.until(ExpectedConditions.titleIs("Wikipedia"));
         BasicRunner.fluentWait.until(ExpectedConditions.titleIs("Wikipedia"));
-   }
+    }
 
     @When("The Guest clicks on English")
     public void the_Guest_clicks_on_English() {
@@ -40,7 +40,7 @@ public class LanguageSteps {
     }
 
     @When("The Guest clicks on Spanish")
-    public void the_Guest_clicks_on_Spanish(){
+    public void the_Guest_clicks_on_Spanish() {
         BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(BasicRunner.wikiHomePage.spanish));
         BasicRunner.wikiHomePage.spanish.click();
 
@@ -82,61 +82,62 @@ public class LanguageSteps {
     }
 
     @Then("The Guest should be on the specific language Search Page with {string}")
-    public void the_Guest_should_be_on_the_specific_language_Home_Page(String title){
+    public void the_Guest_should_be_on_the_specific_language_Home_Page(String title) {
         BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated((By.tagName("title"))));
         String currenttTitle = BasicRunner.driver.getTitle();
-        Assert.assertEquals(title,currenttTitle);
+        Assert.assertEquals(title, currenttTitle);
     }
 
     @When("The Guest is on the Wikipedia Home Page and search in all languages")
     public void allLanguageDropdown() {
 
-        LanguageSteps languageSteps=new LanguageSteps();
+        LanguageSteps languageSteps = new LanguageSteps();
         languageSteps.the_Guest_is_on_the_Wikipedia_Home_Page();
         BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated((By.xpath("//*[@id=\"searchLanguage\"]"))));
         WebElement dropdown = BasicRunner.wikiHomePage.searchLanguage;
         Select dropDownLanguage = new Select(dropdown);
         List<WebElement> options = dropDownLanguage.getOptions();
         ArrayList<String> optionLangs = new ArrayList<>();
-        for (WebElement option:options){
+        for (WebElement option : options) {
             optionLangs.add(option.getAttribute("lang"));
         }
 
-        for(String lang:optionLangs){
-           languageSteps.the_Guest_is_on_the_Wikipedia_Home_Page();
+        for (String lang : optionLangs) {
+            languageSteps.the_Guest_is_on_the_Wikipedia_Home_Page();
 
             BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated((By.xpath("//*[@id=\"searchLanguage\"]"))));
             WebElement eachDropdown = BasicRunner.wikiHomePage.searchLanguage;
             Select eachDropDownLanguage = new Select(dropdown);
-            if(lang.equals("nb")){
-                lang="no";
+            if (lang.equals("nb")) {
+                lang = "no";
             }
-            if(lang.equals("en")){
-                lang="simple";
+            if (lang.equals("en")) {
+                lang = "simple";
             }
-            if(lang.equals("yue")){
-                lang="zh-yue";
+            if (lang.equals("yue")) {
+                lang = "zh-yue";
             }
 
             eachDropDownLanguage.selectByValue(lang);
 
-            if(lang.equals("no")){
-                lang="nb";
+            if (lang.equals("no")) {
+                lang = "nb";
             }
-            if(lang.equals("simple")){
-            lang="en";
+            if (lang.equals("simple")) {
+                lang = "en";
             }
-            if(lang.equals("zh-yue")){
-                lang="yue";
+            if (lang.equals("zh-yue")) {
+                lang = "yue";
             }
 
             languageSteps.the_Guest_clicks_on_searchInputButton();
 
             BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated((By.tagName("html"))));
             WebElement html = BasicRunner.driver.findElement(By.tagName("html"));
-            Assert.assertEquals(lang,html.getAttribute("lang"));
+            Assert.assertEquals(lang, html.getAttribute("lang"));
         }
     }
+
     @When("The Guest clicks the ReadInYourLanguage Button button")
     public void the_Guest_clicks_on_ReadInYourLanguageButton() {
         BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(BasicRunner.wikiHomePage.readInYourLanguage));
@@ -162,10 +163,10 @@ public class LanguageSteps {
         System.out.println(allLists.size());
 
 
-        for (int i=1;i<allLists.size()+1;i++){
-            List<WebElement> eachlist = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div["+i+"]/ul/li/a"));
+        for (int i = 1; i < allLists.size() + 1; i++) {
+            List<WebElement> eachlist = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li/a"));
             System.out.println(eachlist.size());
-            for (WebElement each:eachlist){
+            for (WebElement each : eachlist) {
                 System.out.println(each.getAttribute("lang"));
 
             }
@@ -173,10 +174,33 @@ public class LanguageSteps {
         //*[@id="js-lang-lists"]/div[3]/ul/li[1]/a
         //*[@id="js-lang-lists"]/div[2]/ul
         //*[@id="js-lang-lists"]/div[5]/ul
+        //*[@id="js-lang-lists"]
+        //*[@id="js-lang-lists"]/div[1]/ul/li[1]/a
+//        /html/body/div[6]/div/div[5]/ul/li[26]/a
+
+    }
+
+
+    @When("The Guest Select A Specific {string} from the lists {string}")
+    public void The_Guest_Select_A_Specific_language_from_the_list(String language, String title) {
+        List<WebElement> allLists = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div/ul"));
+        for (int i = 1; i < allLists.size() + 1; i++) {
+            List<WebElement> eachlist = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li/a"));
+            for (WebElement each : eachlist) {
+                System.out.println(each.getText());
+                System.out.println(language);
+                if(each.getText().equals(language)){
+                    System.out.println("ok");
+                    BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(each));
+                    each.click();
+                    Assert.assertEquals(BasicRunner.driver.getTitle(),title);
+                }
+
+            }
+        }
     }
 
 }
-
 
 
 
