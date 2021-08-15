@@ -11,11 +11,9 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
+
 
 public class LanguageSteps {
 
@@ -23,7 +21,7 @@ public class LanguageSteps {
     public void the_Guest_is_on_the_Wikipedia_Home_Page() {
         BasicRunner.driver.get("https://www.wikipedia.org/");
         BasicRunner.wait.until(ExpectedConditions.titleIs("Wikipedia"));
-        BasicRunner.fluentWait.until(ExpectedConditions.titleIs("Wikipedia"));
+//      BasicRunner.fluentWait.until(ExpectedConditions.titleIs("Wikipedia"));
     }
 
     @When("The Guest clicks on English")
@@ -144,63 +142,63 @@ public class LanguageSteps {
         BasicRunner.wikiHomePage.readInYourLanguage.click();
     }
 
-    @When("The Guest Select A Specific from the list")
-    public void languageList() {
-//        BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated((By.xpath("//*[@id=\"searchLanguage\"]"))));
-//        WebElement readableLamguages = BasicRunner.driver.findElement(By.xpath("//*[@id=\"js-lang-lists\"]/div"));
-//        List<WebElement> lists = readableLamguages.findElements(By.tagName("ul"));
-//        System.out.println(lists.size());
-//        for (WebElement list: lists){
-//            List<WebElement> listItems = list.findElements(By.tagName("li"));
-//            for(WebElement item : listItems ){
-//                System.out.println(item.getText());
-//            }
-//        }
-        List<WebElement> list = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div[1]/ul/li"));
-        System.out.println(list.size());
+    @When("The Guest Is Able To Read In Multiple Languages")
+    public void The_Guest_Is_Able_To_Read_In_Multiple_Languages() {
 
-        List<WebElement> allLists = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div/ul"));
-        System.out.println(allLists.size());
-
-
+        LanguageSteps languageSteps = new LanguageSteps();
+        List<WebElement> allLists = BasicRunner.driver.findElements(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div/ul"));
         for (int i = 1; i < allLists.size() + 1; i++) {
-            List<WebElement> eachlist = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li/a"));
-            System.out.println(eachlist.size());
-            for (WebElement each : eachlist) {
-                System.out.println(each.getAttribute("lang"));
+            languageSteps.the_Guest_is_on_the_Wikipedia_Home_Page();
+            List<WebElement> eachlist = BasicRunner.driver.findElements(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li/a"));
+            for (int j = 1; j < eachlist.size() + 1; j++) {
+                System.out.println("i "+i+" j "+j);
+                languageSteps.the_Guest_is_on_the_Wikipedia_Home_Page();
+//                for (int k=0;k<15;k++){
+//                    BasicRunner.driver.navigate().refresh();
+//                }
+                //BasicRunner.driver.navigate().refresh();
+                BasicRunner.driver.navigate().refresh();
+                languageSteps.the_Guest_clicks_on_ReadInYourLanguageButton();
+                //WebElement linkText = BasicRunner.driver.findElement(By.xpath("//*[@id=\"js-lang-lists\"]/div[1]/ul/li[" + j + "]/a"));
+                if(i!=2 && j!=31) {
+                    WebElement linkText = BasicRunner.driver.findElement(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li[" + j + "]/a"));
+                    //BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(linkText));
+                    BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li[" + j + "]/a")));
+                    //BasicRunner.wait.until(ExpectedConditions.visibilityOfElementLocated(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li[" + j + "]/a")));
+                    //BasicRunner.fluentWait.until(ExpectedConditions.visibilityOfElementLocated(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li[" + j + "]/a")));
+                    BasicRunner.wait.until(ExpectedConditions.attributeToBeNotEmpty(BasicRunner.driver.findElement(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li[" + j + "]/a")),"lang"));
+                    //BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(new By.ByXPath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li[" + j + "]/a")));
+                    //String lang = linkText.getAttribute("lang");
 
-            }
-        }
-        //*[@id="js-lang-lists"]/div[3]/ul/li[1]/a
-        //*[@id="js-lang-lists"]/div[2]/ul
-        //*[@id="js-lang-lists"]/div[5]/ul
-        //*[@id="js-lang-lists"]
-        //*[@id="js-lang-lists"]/div[1]/ul/li[1]/a
-//        /html/body/div[6]/div/div[5]/ul/li[26]/a
-
-    }
-
-
-    @When("The Guest Select A Specific {string} from the lists {string}")
-    public void The_Guest_Select_A_Specific_language_from_the_list(String language, String title) {
-        List<WebElement> allLists = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div/ul"));
-        for (int i = 1; i < allLists.size() + 1; i++) {
-            List<WebElement> eachlist = BasicRunner.driver.findElements(By.xpath("//*[@id=\"js-lang-lists\"]/div[" + i + "]/ul/li/a"));
-            for (WebElement each : eachlist) {
-                System.out.println(each.getText());
-                System.out.println(language);
-                if(each.getText().equals(language)){
-                    System.out.println("ok");
-                    BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(each));
-                    each.click();
-                    Assert.assertEquals(BasicRunner.driver.getTitle(),title);
+                    System.out.println(linkText.getText());
+                    System.out.println(linkText.getAttribute("lang"));
+                    //linkText.click();
+                    //BasicRunner.wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("html")));
+                    //WebElement html = BasicRunner.driver.findElement(By.tagName("html"));
+                    //Assert.assertTrue(lang.contains(html.getAttribute("lang")) || html.getAttribute("lang").contains(lang));
+                    BasicRunner.driver.navigate().back();
+                    //for (int k=0;k<5;k++){
+                    BasicRunner.driver.navigate().refresh();
                 }
-
+                }
             }
         }
+
+
+
+
+        @When("The Guest Select A Specific {string}")
+        public void The_Guest_Select_A_Specific_language_from_the_list (String language){
+
+            WebElement linkText = BasicRunner.driver.findElement(new By.ByLinkText(language));
+            BasicRunner.wait.until(ExpectedConditions.elementToBeClickable(BasicRunner.driver.findElement(new By.ByLinkText(language))));
+            linkText.click();
+
+        }
+
     }
 
-}
+
 
 
 
